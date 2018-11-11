@@ -7,14 +7,14 @@ import javax.swing.*;
 
 /**
  * Client-server graphical editor
- * 
+ *
  * @author Chris Bailey-Kellogg, Dartmouth CS 10, Fall 2012; loosely based on CS 5 code by Tom Cormen
  * @author CBK, winter 2014, overall structure substantially revised
  * @author Travis Peters, Dartmouth CS 10, Winter 2015; remove EditorCommunicatorStandalone (use echo server for testing)
  * @author CBK, spring 2016 and Fall 2016, restructured Shape and some of the GUI
  */
 
-public class Editor extends JFrame {	
+public class Editor extends JFrame {
 	private static String serverIP = "localhost";			// IP address of sketch server
 	// "localhost" for your own machine;
 	// or ask a friend for their IP address
@@ -77,7 +77,7 @@ public class Editor extends JFrame {
 				drawSketch(g);
 			}
 		};
-		
+
 		canvas.setPreferredSize(new Dimension(width, height));
 
 		canvas.addMouseListener(new MouseAdapter() {
@@ -88,14 +88,14 @@ public class Editor extends JFrame {
 			public void mouseReleased(MouseEvent event) {
 				handleRelease();
 			}
-		});		
+		});
 
 		canvas.addMouseMotionListener(new MouseAdapter() {
 			public void mouseDragged(MouseEvent event) {
 				handleDrag(event.getPoint());
 			}
 		});
-		
+
 		return canvas;
 	}
 
@@ -172,7 +172,7 @@ public class Editor extends JFrame {
 	}
 
 	// Helpers for event handlers
-	
+
 	/**
 	 * Helper method for press at point
 	 * In drawing mode, start a new object;
@@ -182,6 +182,18 @@ public class Editor extends JFrame {
 	 */
 	private void handlePress(Point p) {
 		// TODO: YOUR CODE HERE
+		if (mode = Mode.DRAW){
+
+		}
+		if (mode = Mode.MOVE){
+
+		}
+		if (mode = Mode.RECOLOR){
+
+		}
+		if (mode = Mode.DELETE){
+
+		}
 	}
 
 	/**
@@ -191,15 +203,27 @@ public class Editor extends JFrame {
 	 */
 	private void handleDrag(Point p) {
 		// TODO: YOUR CODE HERE
+		if (mode = Mode.DRAW){
+
+		}
+		if (mode = Mode.MOVE){
+
+		}
 	}
 
 	/**
 	 * Helper method for release
 	 * In drawing mode, pass the add new object request on to the server;
-	 * in moving mode, release it		
+	 * in moving mode, release it
 	 */
 	private void handleRelease() {
 		// TODO: YOUR CODE HERE
+		if (mode = Mode.DRAW){
+
+		}
+		if (mode = Mode.MOVE){
+			
+		}
 	}
 
 	public static void main(String[] args) {
@@ -207,6 +231,6 @@ public class Editor extends JFrame {
 			public void run() {
 				new Editor();
 			}
-		});	
+		});
 	}
 }
