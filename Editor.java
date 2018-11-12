@@ -1,5 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -82,6 +81,9 @@ public class Editor extends JFrame {
 
 		canvas.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent event) {
+				Point p = new Point((int)event.getX(), (int)event.getY());
+				drawFrom = p;
+				moveFrom = p; 
 				handlePress(event.getPoint());
 			}
 
@@ -168,7 +170,14 @@ public class Editor extends JFrame {
 	 * along with the object currently being drawn in this editor (not yet part of the sketch)
 	 */
 	public void drawSketch(Graphics g) {
-		// TODO: YOUR CODE HERE
+		for (Shape s : shapes.descendingKeySet()){
+			g.setColor(s.getColor());
+			s.draw(g);
+		}
+		if (curr != null){
+			g.setColor(color);
+			curr.draw(g);
+		}
 	}
 
 	// Helpers for event handlers
@@ -182,16 +191,17 @@ public class Editor extends JFrame {
 	 */
 	private void handlePress(Point p) {
 		// TODO: YOUR CODE HERE
-		if (mode = Mode.DRAW){
+		if (mode == Mode.DRAW){
+			handleDrag(p);
+			repaint();
+		}
+		if (mode == Mode.MOVE){
 
 		}
-		if (mode = Mode.MOVE){
+		if (mode == Mode.RECOLOR){
 
 		}
-		if (mode = Mode.RECOLOR){
-
-		}
-		if (mode = Mode.DELETE){
+		if (mode == Mode.DELETE){
 
 		}
 	}
@@ -202,12 +212,27 @@ public class Editor extends JFrame {
 	 * in moving mode, (request to) drag the object
 	 */
 	private void handleDrag(Point p) {
-		// TODO: YOUR CODE HERE
-		if (mode = Mode.DRAW){
-
+		if (mode == Mode.DRAW){
+			if (shapeType == "ellipse"){
+				curr.setCorners((int)drawFrom.getX(), (int)drawFrom.getY(), (int)p.getX(), (int)p.getY());
+			}
+			else if (shapeType == "freehand"){
+				Segment s = new Segment((int)drawFrom.getX(), (int)drawFrom.getY(), (int)p.getX(), (int)p.getY(), color);
+				curr.addSeg(s);
+			}
+			else if (shapeType == "rectangle"){
+				curr.setCorners((int)drawFrom.getX(), (int)drawFrom.getY(), (int)p.getX(), (int)p.getY());
+			}
+			else if (shapeType == "segment"){
+				curr.setStart((int)drawFrom.getX(), (int)drawFrom.getY());
+				curr.setEnd((int)drawFrom.getX(), (int)drawFrom.getY());
+			}
+			repaint();
 		}
-		if (mode = Mode.MOVE){
-
+		if (mode == Mode.MOVE){
+			curr.moveBy((int)p.getX() - (int)moveFrom.getX(), (int)p.getY() - (int)moveFrom.getY());
+			moveFrom = p;
+			repaint();
 		}
 	}
 
@@ -218,11 +243,11 @@ public class Editor extends JFrame {
 	 */
 	private void handleRelease() {
 		// TODO: YOUR CODE HERE
-		if (mode = Mode.DRAW){
-
+		if (mode == Mode.DRAW){
+			//comm.send(something?);
 		}
-		if (mode = Mode.MOVE){
-			
+		if (mode == Mode.MOVE){
+			moveFrom = null;
 		}
 	}
 
