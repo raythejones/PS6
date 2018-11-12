@@ -83,7 +83,7 @@ public class Editor extends JFrame {
 			public void mousePressed(MouseEvent event) {
 				Point p = new Point((int)event.getX(), (int)event.getY());
 				drawFrom = p;
-				moveFrom = p; 
+				moveFrom = p;
 				handlePress(event.getPoint());
 			}
 
@@ -196,10 +196,12 @@ public class Editor extends JFrame {
 			repaint();
 		}
 		if (mode == Mode.MOVE){
-
+			//how does one make a request?
+			handleDrag(p);
+			repaint();
 		}
 		if (mode == Mode.RECOLOR){
-
+			
 		}
 		if (mode == Mode.DELETE){
 

@@ -3,7 +3,7 @@ import java.net.Socket;
 
 /**
  * Handles communication to/from the server for the editor
- * 
+ *
  * @author Chris Bailey-Kellogg, Dartmouth CS 10, Fall 2012
  * @author Chris Bailey-Kellogg; overall structure substantially revised Winter 2014
  * @author Travis Peters, Dartmouth CS 10, Winter 2015; remove EditorCommunicatorStandalone (use echo server for testing)
@@ -45,6 +45,14 @@ public class EditorCommunicator extends Thread {
 		try {
 			// Handle messages
 			// TODO: YOUR CODE HERE
+			BufferedReader in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+			PrintWriter out = new PrintWriter(sock.getOutputStream(), true);
+			while((line = in.readLine()) != null){
+				//do something??
+			}
+			in.close();
+			out.close();
+			sock.close(); 
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -52,9 +60,9 @@ public class EditorCommunicator extends Thread {
 		finally {
 			System.out.println("server hung up");
 		}
-	}	
+	}
 
 	// Send editor requests to the server
 	// TODO: YOUR CODE HERE
-	
+
 }
