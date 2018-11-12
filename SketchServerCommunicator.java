@@ -38,9 +38,25 @@ public class SketchServerCommunicator extends Thread {
 
 			// Tell the client the current state of the world
 			// TODO: YOUR CODE HERE
-
+			
+			for(int val : server.getSketch().getShapes().keySet()) {
+				send("Add " + (server.getSketch().getShapes().get(val)));
+			}
 			// Keep getting and handling messages from the client
 			// TODO: YOUR CODE HERE
+			
+			String message;
+			Sketch serverSketch = server.getSketch();
+			
+			message = in.readLine();
+			while(!message.equals(null))
+			{
+				//read and interpret the message
+				ReadMessage.readMessage(serverSketch, message); //add in concurrency synchronization
+				System.out.println("Recieved: " + message);
+				server.broadcast(message);
+				message = in.readLine();
+			}
 
 			// Clean up -- note that also remove self from server's list so it doesn't broadcast here
 			server.removeCommunicator(this);

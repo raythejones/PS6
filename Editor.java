@@ -170,15 +170,11 @@ public class Editor extends JFrame {
 	 * along with the object currently being drawn in this editor (not yet part of the sketch)
 	 */
 	public void drawSketch(Graphics g) {
-		for (Shape s : shapes.descendingKeySet()){
-			g.setColor(s.getColor());
-			s.draw(g);
-		}
-		if (curr != null){
-			g.setColor(color);
+		sketch.draw(g);
+		if(curr != null) {
 			curr.draw(g);
-		}
 	}
+}
 
 	// Helpers for event handlers
 
@@ -191,43 +187,69 @@ public class Editor extends JFrame {
 	 */
 	private void handlePress(Point p) {
 		// TODO: YOUR CODE HERE
-		if (mode == Mode.DRAW){
-			handleDrag(p);
+		if(mode == Mode.DRAW) {
+			if(shapeType.equals("ellipse")) {
+				curr = new Ellipse(p.x,p.y,color);
+				drawFrom = p;
+			}
+			if(shapeType.equals("segment")) {
+				curr = new Segment(p.x,p.y,color);
+				drawFrom = p;
+			}
+			if(shapeType.equals("rectangle")) {
+				curr = new Rectangle(p.x,p.y,color);
+				drawFrom = p;
+			}	
+			if(shapeType.equals("freehand")){
+				curr = new Segment(p.x,p.y, color); // RAY dont know what to do with this one
+				drawFrom = p;
+			}
 			repaint();
 		}
 		if (mode == Mode.MOVE){
-			//how does one make a request?
-			handleDrag(p);
-			repaint();
+			Shape clickedShape = sketch.containsPoint(p);
+			if(clickedShape != null) {
+				movingId = sketch.getidVal(clickedShape);
+				moveFrom = p;
+			}
 		}
 		if (mode == Mode.RECOLOR){
-			
+			Shape clickedShape = sketch.containsPoint(p);
+			if(clickedShape != null) {
+				comm.recolorComm(sketch.getidVal(clickedShape), color.getRGB()); 
+				repaint();
+			}			
 		}
 		if (mode == Mode.DELETE){
-
-		}
-	}
+			Shape clickedShape = sketch.containsPoint(p);
+			if(clickedShape != null) {
+				comm.deleteComm(sketch.getidVal(clickedShape)); 
+				repaint();
+			}
+	}}
 
 	/**
 	 * Helper method for drag to new point
 	 * In drawing mode, update the other corner of the object;
 	 * in moving mode, (request to) drag the object
 	 */
-	private void handleDrag(Point p) {
+	private void handleDrag(Point p) { 
 		if (mode == Mode.DRAW){
-			if (shapeType == "ellipse"){
-				curr.setCorners((int)drawFrom.getX(), (int)drawFrom.getY(), (int)p.getX(), (int)p.getY());
+			if (shapeType.equals("ellipse")){
+				((Ellipse) curr).setCorners(drawFrom.x, drawFrom.y, p.x,p.y);
+				repaint();
 			}
-			else if (shapeType == "freehand"){
-				Segment s = new Segment((int)drawFrom.getX(), (int)drawFrom.getY(), (int)p.getX(), (int)p.getY(), color);
-				curr.addSeg(s);
+			else if (shapeType.equals("freehand")){
+				((Segment) curr).setEnd(p.x,p.y);
+				repaint();
 			}
-			else if (shapeType == "rectangle"){
-				curr.setCorners((int)drawFrom.getX(), (int)drawFrom.getY(), (int)p.getX(), (int)p.getY());
+			else if (shapeType.equals("rectangle")){
+				((Rectangle) curr).setCorners(drawFrom.x, drawFrom.y, p.x,p.y);
+				repaint();
 			}
-			else if (shapeType == "segment"){
-				curr.setStart((int)drawFrom.getX(), (int)drawFrom.getY());
-				curr.setEnd((int)drawFrom.getX(), (int)drawFrom.getY());
+			else if (shapeType.equals("segment")){
+				((Segment) curr).setEnd(p.x,p.y);
+				repaint();			
 			}
 			repaint();
 		}
@@ -236,6 +258,7 @@ public class Editor extends JFrame {
 			moveFrom = p;
 			repaint();
 		}
+		repaint();
 	}
 
 	/**
@@ -246,11 +269,18 @@ public class Editor extends JFrame {
 	private void handleRelease() {
 		// TODO: YOUR CODE HERE
 		if (mode == Mode.DRAW){
-			//comm.send(something?);
+			if(curr != null) {
+				comm.addComm(curr); 
+				repaint();
+			}		
 		}
 		if (mode == Mode.MOVE){
 			moveFrom = null;
+			repaint();
+
 		}
+		curr = null; 
+		repaint();
 	}
 
 	public static void main(String[] args) {

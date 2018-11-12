@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.Socket;
+import java.awt.*;
 
 /**
  * Handles communication to/from the server for the editor
@@ -45,14 +46,55 @@ public class EditorCommunicator extends Thread {
 		try {
 			// Handle messages
 			// TODO: YOUR CODE HERE
-			BufferedReader in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-			PrintWriter out = new PrintWriter(sock.getOutputStream(), true);
-			while((line = in.readLine()) != null){
-				//do something??
+			String message; 
+			Sketch sketch = editor.getSketch(); 
+			
+			while(!(message = in.readLine()).equals(null))
+			{
+		String[] splitMessage = message.split(" "); 
+		Integer comm = Integer.parseInt(splitMessage[0]); 
+		Integer shape = Integer.parseInt(splitMessage[1]);
+		
+		if(comm.equals("move")) { 
+			sketch.moveShape(shape, Integer.parseInt(splitMessage[2]), Integer.parseInt(splitMessage[3]));
+		}
+	
+		if(comm.equals("recolor")) { 
+			Color color = new Color(Integer.parseInt(splitMessage[2]));
+			sketch.recolor(shape, color);
+		}
+		
+		if(comm.equals("delete")) { 
+			sketch.remove(shape);
+		}
+		
+		if(comm.equals("add")) { 
+			Integer second = Integer.parseInt(splitMessage[2]);
+			Integer third = Integer.parseInt(splitMessage[3]);
+			Integer fourth = Integer.parseInt(splitMessage[4]);
+			Integer fifth = Integer.parseInt(splitMessage[5]);
+			Integer sixth = Integer.parseInt(splitMessage[6]);
+
+			if(shape.equals("ellipse")) {
+				Ellipse ell = new Ellipse(second, third, fourth, fifth, new Color(sixth));
+				sketch.addAtNext(ell);
 			}
-			in.close();
-			out.close();
-			sock.close(); 
+			else if(shape.equals("segment")) {
+				Segment seg = new Segment(second, third, fourth, fifth, new Color(sixth));
+				sketch.addAtNext(seg);
+			}
+			else if(shape.equals("rectangle")) {
+				Rectangle rect = new Rectangle(second, third, fourth, fifth, new Color(sixth));
+				sketch.addAtNext(rect);
+			}
+			else if(shape.equals("freehand")) { 
+				Segment seg = new Segment(second, third, fourth, fifth, new Color(sixth));
+				sketch.addAtNext(seg);
+
+			}
+		}				editor.repaint(); 
+			}
+ 
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -65,4 +107,23 @@ public class EditorCommunicator extends Thread {
 	// Send editor requests to the server
 	// TODO: YOUR CODE HERE
 
+	//move request
+	public void moveComm(int shapeid, int x, int y) {
+		send("move" + " " + shapeid + " " + x + " " + y);
+	}
+	
+	//recolor request
+	public void recolorComm(int shapeid, int color) {
+		send("recolor" + " " + shapeid + " " + color);
+	}
+	
+	//delete request
+	public void deleteComm(int shapeid) {
+		send("delete" + " " + shapeid);
+	}
+	
+	//add request
+	public void addComm(Shape shape) {
+		send("add" + " " + shape.toString());
+	}
 }

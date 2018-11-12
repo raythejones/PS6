@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Graphics;
 
+
 /**
  * A geometric entity with a color
  * 
