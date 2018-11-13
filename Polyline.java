@@ -17,7 +17,7 @@ public class Polyline implements Shape {
 
 	public Polyline(Color c ){
 		pieces = new ArrayList<Point>();
-		color = c; 
+		color = c;
 	}
 
 	public Polyline(Point s, Color c){
@@ -29,7 +29,7 @@ public class Polyline implements Shape {
 	public Polyline(String comm, Color color) {
 		String[] enter = comm.split(" ");
 		pieces = new ArrayList<Point>();
-		
+
 		for(int i = 1; i < enter.length-1; i+=2) {
 			Point p = new Point(Integer.parseInt(enter[i]), Integer.parseInt(enter[i+1]));
 			pieces.add(p);
@@ -38,9 +38,10 @@ public class Polyline implements Shape {
 
 	@Override
 	public void moveBy(int dx, int dy) {
-		for(Point p : pieces) {
-			pieces.remove(p);
-			pieces.add(new Point(p.x+dx,p.y+dy));
+		for (int i = 0; i < pieces.size(); i ++){
+			Point p = pieces.get(i);
+			pieces.remove(i);
+			pieces.add(i, new Point(p.x+dx,p.y+dy));
 		}
 	}
 
@@ -66,7 +67,7 @@ public class Polyline implements Shape {
 				retval = true;
 		}}
 		return retval;
-	
+
 }
 
 

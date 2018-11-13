@@ -58,8 +58,8 @@ public class Sketch {
 
 	public synchronized Shape containsPoint(Point p) {
 		Shape shape = null;
-		for(int idVal : shapes.navigableKeySet()) { 
-			if(shapes.get(idVal).contains(p.x, p.y)) { 
+		for(int idVal : shapes.navigableKeySet()) {
+			if(shapes.get(idVal).contains(p.x, p.y)) {
 				shape = shapes.get(idVal);
 			}
 		}
