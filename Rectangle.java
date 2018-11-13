@@ -71,8 +71,8 @@ public class Rectangle implements Shape {
 	*/
 	@Override
 	public boolean contains(int x, int y) {
-		double xcent = (x1 + x2) / 2;
-		double ycent = (y1 + y2) / 2;
+		double xcent = (x1 - x2) / 2;
+		double ycent = (y1 - y2) / 2;
 		double dx = (x - (x1 + xcent));
 		double dy = (y - (y1 + ycent));
 		return Math.pow(dx / xcent, 2) + Math.pow(dy / ycent, 2) <= 1;
