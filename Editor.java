@@ -17,7 +17,7 @@ import javax.swing.*;
  */
 
 public class Editor extends JFrame {
-	private static String serverIP = "172.20.10.10";			// IP address of sketch server
+	private static String serverIP = "localhost";			// IP address of sketch server
 	// "localhost" for your own machine;
 	// or ask a friend for their IP address
 

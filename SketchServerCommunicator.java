@@ -42,7 +42,7 @@ public class SketchServerCommunicator extends Thread {
 			// Tell the client the current state of the world
 			//adds the shapes already in the sketch to the world
 			for(int val : server.getSketch().getShapes().keySet()) {
-				send("Add " + (server.getSketch().getShapes().get(val)));
+				send("add " + (server.getSketch().getShapes().get(val)));
 			}
 
 			// Keep getting and handling messages from the client
