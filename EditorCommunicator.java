@@ -3,6 +3,8 @@ import java.net.Socket;
 import java.awt.*;
 
 /**
+ * @author Donia Tung
+ * @author August Ray Jones
  * Handles communication to/from the server for the editor
  *
  * @author Chris Bailey-Kellogg, Dartmouth CS 10, Fall 2012
@@ -45,16 +47,17 @@ public class EditorCommunicator extends Thread {
 	public void run() {
 		try {
 			// Handle messages
-			// TODO: YOUR CODE HERE
 			String message;
 			Sketch sketch = editor.getSketch();
-
+			//while there are new messages from the editor
 			while(!(message = in.readLine()).equals(null)){
+				//Class read handles the interpretation of the message
 				Read.read(sketch, message);
 				editor.repaint();
 				}
 
 			}
+			//Catch io exceptions and print stack trace
 			catch (IOException e) {
 				e.printStackTrace();
 			}

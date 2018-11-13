@@ -5,6 +5,9 @@ import java.awt.event.*;
 import javax.swing.*;
 
 /**
+ * @author Donia Tung
+ * @author August Ray Jones
+ *
  * Client-server graphical editor
  *
  * @author Chris Bailey-Kellogg, Dartmouth CS 10, Fall 2012; loosely based on CS 5 code by Tom Cormen
@@ -186,7 +189,7 @@ public class Editor extends JFrame {
 	 * in deleting mode, (request to) delete clicked shape
 	 */
 	private void handlePress(Point p) {
-		// TODO: YOUR CODE HERE
+		//if draw, start new object for each possible shapeType
 		if(mode == Mode.DRAW) {
 			if(shapeType.equals("ellipse")) {
 				curr = new Ellipse(p.x,p.y,color);
@@ -207,6 +210,7 @@ public class Editor extends JFrame {
 			}
 			repaint();
 		}
+		//in moving mode, start request for moving shape
 		else if (mode == Mode.MOVE){
 			Shape clickedShape = sketch.containsPoint(p);
 			if(clickedShape != null) {
@@ -214,6 +218,7 @@ public class Editor extends JFrame {
 				moveFrom = p;
 			}
 		}
+		//in recoloring mode,  start request to change clicked shape's color
 		else if (mode == Mode.RECOLOR){
 			Shape clickedShape = sketch.containsPoint(p);
 			if(clickedShape != null) {
@@ -221,6 +226,7 @@ public class Editor extends JFrame {
 				repaint();
 			}
 		}
+		//in deleting mode, start request to delete
 		else if (mode == Mode.DELETE){
 			Shape clickedShape = sketch.containsPoint(p);
 			if(clickedShape != null) {
@@ -235,6 +241,7 @@ public class Editor extends JFrame {
 	 * in moving mode, (request to) drag the object
 	 */
 	private void handleDrag(Point p) {
+		//if draw, update the corners of each various shape
 		if (mode == Mode.DRAW){
 			if (shapeType.equals("ellipse")){
 				((Ellipse) curr).setCorners(drawFrom.x, drawFrom.y, p.x,p.y);
@@ -257,6 +264,7 @@ public class Editor extends JFrame {
 			}
 			repaint();
 		}
+		//if moving, send move request
 		if (mode == Mode.MOVE){
 			if(moveFrom != null) {
 			comm.moveComm(movingId, p.x-moveFrom.x, p.y-moveFrom.y);
@@ -273,13 +281,14 @@ public class Editor extends JFrame {
 	 * in moving mode, release it
 	 */
 	private void handleRelease() {
-		// TODO: YOUR CODE HERE
+		//if drawing, send actual completed shape through comm
 		if (mode == Mode.DRAW){
 			if(curr != null) {
 				comm.addComm(curr);
 				repaint();
 			}
 		}
+		//if moving, stop moving
 		else if (mode == Mode.MOVE){
 			moveFrom = null;
 			repaint();

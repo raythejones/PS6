@@ -1,12 +1,13 @@
+import java.util.*;
+import java.awt.*;
+
+
 /**
 * @author Donia Tung
 * @author August Ray Jones
 *
 * Class holding the current shape list
 */
-
-import java.util.*;
-import java.awt.*;
 
 public class Sketch {
 
