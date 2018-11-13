@@ -51,8 +51,7 @@ public class SketchServerCommunicator extends Thread {
 
 			message = in.readLine();
 			//while there are more messages from the client...
-			while(!message.equals(null))
-			{
+			while(message != null){
 				//read and interpret the message
 				Read.read(serverSketch, message);
 				System.out.println("Recieved: " + message);
