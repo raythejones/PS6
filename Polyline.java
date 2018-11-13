@@ -12,29 +12,40 @@ import java.util.List;
  */
 public class Polyline implements Shape {
 	// TODO: YOUR CODE HERE
-	List<Segment> pieces;
-	Color color;
+	private Color color;
+	private ArrayList<Point> pieces;
 
 	public Polyline(Color c ){
-		pieces = new ArrayList<Segment>();
+		pieces = new ArrayList<Point>();
 		color = c; 
 	}
 
-	public Polyline(Segment s, Color c){
-		pieces = new ArrayList<Segment>();
+	public Polyline(Point s, Color c){
+		pieces = new ArrayList<Point>();
 		pieces.add(s);
 		color = c;
 	}
 
-	@Override
-	public void moveBy(int dx, int dy) {
-		for (Segment s : pieces){
-			s.moveBy(dx, dy);
+	public Polyline(String comm, Color color) {
+		String[] enter = comm.split(" ");
+		pieces = new ArrayList<Point>();
+		
+		for(int i = 1; i < enter.length-1; i+=2) {
+			Point p = new Point(Integer.parseInt(enter[i]), Integer.parseInt(enter[i+1]));
+			pieces.add(p);
 		}
 	}
 
-	public void addSeg(Segment s){
-		pieces.add(s);
+	@Override
+	public void moveBy(int dx, int dy) {
+		for(Point p : pieces) {
+			pieces.remove(p);
+			pieces.add(new Point(p.x+dx,p.y+dy));
+		}
+	}
+
+	public void addPoint(Point p) {
+		pieces.add(p);
 	}
 
 	@Override
@@ -50,29 +61,34 @@ public class Polyline implements Shape {
 	@Override
 	public boolean contains(int x, int y) {
 		boolean retval = false;
-		for (Segment s : pieces){
-			if (s.contains(x, y)){
+	for(int i = 0; i < pieces.size()-1; i++) {
+			if(Segment.pointToSegmentDistance(x, y, pieces.get(i).x, pieces.get(i).y, pieces.get(i+1).x, pieces.get(i+1).y) < 5){
 				retval = true;
-			}
-		}
+		}}
 		return retval;
-	}
+	
+}
+
+
+
 
 	@Override
 	public void draw(Graphics g) {
 		g.setColor(color);
-		for (Segment s: pieces){
-			s.draw(g);
+		for(int i = 0; i < pieces.size()-1; i++) {
+			g.drawLine(pieces.get(i).x, pieces.get(i).y, pieces.get(i+1).x, pieces.get(i+1).y);
 		}
 	}
 
 	@Override
 	public String toString() {
-		String str = "polyline ";
-		for (Segment s : pieces){
-			str += s.toString() + " to ";
+		String str =  "polyline";
+		//add each point to the result
+		for(Point p : pieces) {
+			str +=" "+p.x+ " "+p.y;
 		}
-		return str;
+		return str+" "+color.getRGB();
 	}
+	
 
 }

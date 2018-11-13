@@ -58,8 +58,8 @@ public class Sketch {
 
 	public synchronized Shape containsPoint(Point p) {
 		Shape shape = null;
-		for(int idVal : shapes.navigableKeySet()) { //ordered by order they were added to tree map
-			if(shapes.get(idVal).contains(p.x, p.y)) { //if shape contains point
+		for(int idVal : shapes.navigableKeySet()) { 
+			if(shapes.get(idVal).contains(p.x, p.y)) { 
 				shape = shapes.get(idVal);
 			}
 		}

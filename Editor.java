@@ -202,7 +202,7 @@ public class Editor extends JFrame {
 			}
 			if(shapeType.equals("freehand")){
 				//temp = new Segment(p.x,p.y, color);
-				curr = new Polyline(color);
+				curr = new Polyline(p, color);
 				drawFrom = p;
 			}
 			repaint();
@@ -241,9 +241,7 @@ public class Editor extends JFrame {
 				repaint();
 			}
 			else if (shapeType.equals("freehand")){
-				//((Segment) temp).setEnd(p.x,p,y);
-				((Polyline) curr).addSeg(new Segment(drawFrom.x, drawFrom.y, p.x, p.y, color));
-				drawFrom = p; 
+				((Polyline) curr).addPoint(p);
 				repaint();
 			}
 			else if (shapeType.equals("rectangle")){
@@ -257,10 +255,12 @@ public class Editor extends JFrame {
 			repaint();
 		}
 		if (mode == Mode.MOVE){
+			if(moveFrom != null) {
 			comm.moveComm(movingId,p.x- (int)moveFrom.getX(), p.y - (int)moveFrom.getY());
 			moveFrom = p;
 			repaint();
 		}
+	}
 		repaint();
 	}
 
