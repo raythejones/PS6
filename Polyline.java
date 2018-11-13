@@ -82,13 +82,12 @@ public class Polyline implements Shape {
 
 	@Override
 	public String toString() {
-		String str =  "polyline";
+		String result =  "polyline ";
 		//add each point to the result
 		for(Point p : pieces) {
-			str +=" "+p.x+ " "+p.y;
+			result += " "+p.x+ " "+p.y;
 		}
-		return str+" "+color.getRGB();
+		return result+" "+color.getRGB();
 	}
-	
 
 }

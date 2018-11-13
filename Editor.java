@@ -207,21 +207,21 @@ public class Editor extends JFrame {
 			}
 			repaint();
 		}
-		if (mode == Mode.MOVE){
+		else if (mode == Mode.MOVE){
 			Shape clickedShape = sketch.containsPoint(p);
 			if(clickedShape != null) {
 				movingId = sketch.getidVal(clickedShape);
 				moveFrom = p;
 			}
 		}
-		if (mode == Mode.RECOLOR){
+		else if (mode == Mode.RECOLOR){
 			Shape clickedShape = sketch.containsPoint(p);
 			if(clickedShape != null) {
 				comm.recolorComm(sketch.getidVal(clickedShape), color.getRGB());
 				repaint();
 			}
 		}
-		if (mode == Mode.DELETE){
+		else if (mode == Mode.DELETE){
 			Shape clickedShape = sketch.containsPoint(p);
 			if(clickedShape != null) {
 				comm.deleteComm(sketch.getidVal(clickedShape));
@@ -240,23 +240,26 @@ public class Editor extends JFrame {
 				((Ellipse) curr).setCorners(drawFrom.x, drawFrom.y, p.x,p.y);
 				repaint();
 			}
-			else if (shapeType.equals("freehand")){
-				((Polyline) curr).addPoint(p);
+			
+			if (shapeType.equals("segment")){
+				((Segment) curr).setEnd(p.x,p.y);
 				repaint();
 			}
-			else if (shapeType.equals("rectangle")){
+
+			if (shapeType.equals("rectangle")){
 				((Rectangle) curr).setCorners(drawFrom.x, drawFrom.y, p.x,p.y);
 				repaint();
 			}
-			else if (shapeType.equals("segment")){
-				((Segment) curr).setEnd(p.x,p.y);
+
+			if (shapeType.equals("freehand")){
+				((Polyline) curr).addPoint(p);
 				repaint();
 			}
 			repaint();
 		}
 		if (mode == Mode.MOVE){
 			if(moveFrom != null) {
-			comm.moveComm(movingId,p.x- (int)moveFrom.getX(), p.y - (int)moveFrom.getY());
+			comm.moveComm(movingId, p.x-moveFrom.x, p.y-moveFrom.y);
 			moveFrom = p;
 			repaint();
 		}
@@ -270,13 +273,14 @@ public class Editor extends JFrame {
 	 * in moving mode, release it
 	 */
 	private void handleRelease() {
+		// TODO: YOUR CODE HERE
 		if (mode == Mode.DRAW){
 			if(curr != null) {
 				comm.addComm(curr);
 				repaint();
 			}
 		}
-		if (mode == Mode.MOVE){
+		else if (mode == Mode.MOVE){
 			moveFrom = null;
 			repaint();
 

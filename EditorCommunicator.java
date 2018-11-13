@@ -45,6 +45,7 @@ public class EditorCommunicator extends Thread {
 	public void run() {
 		try {
 			// Handle messages
+			// TODO: YOUR CODE HERE
 			String message;
 			Sketch sketch = editor.getSketch();
 
