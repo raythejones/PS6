@@ -15,6 +15,11 @@ public class Polyline implements Shape {
 	List<Segment> pieces;
 	Color color;
 
+	public Polyline(Color c ){
+		pieces = new ArrayList<Segment>();
+		color = c; 
+	}
+
 	public Polyline(Segment s, Color c){
 		pieces = new ArrayList<Segment>();
 		pieces.add(s);

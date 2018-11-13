@@ -35,7 +35,7 @@ public class Editor extends JFrame {
 	private int movingId = -1;					// current shape id (if any; else -1) being moved
 	private Point drawFrom = null;				// where the drawing started
 	private Point moveFrom = null;				// where object is as it's being dragged
-
+	private Shape temp = null;
 
 	// Communication
 	private EditorCommunicator comm;			// communication with the sketch server
@@ -199,9 +199,10 @@ public class Editor extends JFrame {
 			if(shapeType.equals("rectangle")) {
 				curr = new Rectangle(p.x,p.y,color);
 				drawFrom = p;
-			}	
+			}
 			if(shapeType.equals("freehand")){
-				curr = new Segment(p.x,p.y, color); // RAY dont know what to do with this one
+				//temp = new Segment(p.x,p.y, color);
+				curr = new Polyline(color);
 				drawFrom = p;
 			}
 			repaint();
@@ -216,14 +217,14 @@ public class Editor extends JFrame {
 		if (mode == Mode.RECOLOR){
 			Shape clickedShape = sketch.containsPoint(p);
 			if(clickedShape != null) {
-				comm.recolorComm(sketch.getidVal(clickedShape), color.getRGB()); 
+				comm.recolorComm(sketch.getidVal(clickedShape), color.getRGB());
 				repaint();
-			}			
+			}
 		}
 		if (mode == Mode.DELETE){
 			Shape clickedShape = sketch.containsPoint(p);
 			if(clickedShape != null) {
-				comm.deleteComm(sketch.getidVal(clickedShape)); 
+				comm.deleteComm(sketch.getidVal(clickedShape));
 				repaint();
 			}
 	}}
@@ -233,14 +234,16 @@ public class Editor extends JFrame {
 	 * In drawing mode, update the other corner of the object;
 	 * in moving mode, (request to) drag the object
 	 */
-	private void handleDrag(Point p) { 
+	private void handleDrag(Point p) {
 		if (mode == Mode.DRAW){
 			if (shapeType.equals("ellipse")){
 				((Ellipse) curr).setCorners(drawFrom.x, drawFrom.y, p.x,p.y);
 				repaint();
 			}
 			else if (shapeType.equals("freehand")){
-				((Segment) curr).setEnd(p.x,p.y);
+				//((Segment) temp).setEnd(p.x,p,y);
+				((Polyline) curr).addSeg(new Segment(drawFrom.x, drawFrom.y, p.x, p.y, color));
+				drawFrom = p; 
 				repaint();
 			}
 			else if (shapeType.equals("rectangle")){
@@ -249,12 +252,12 @@ public class Editor extends JFrame {
 			}
 			else if (shapeType.equals("segment")){
 				((Segment) curr).setEnd(p.x,p.y);
-				repaint();			
+				repaint();
 			}
 			repaint();
 		}
 		if (mode == Mode.MOVE){
-			curr.moveBy((int)p.getX() - (int)moveFrom.getX(), (int)p.getY() - (int)moveFrom.getY());
+			comm.moveComm(movingId,p.x- (int)moveFrom.getX(), p.y - (int)moveFrom.getY());
 			moveFrom = p;
 			repaint();
 		}
@@ -267,19 +270,18 @@ public class Editor extends JFrame {
 	 * in moving mode, release it
 	 */
 	private void handleRelease() {
-		// TODO: YOUR CODE HERE
 		if (mode == Mode.DRAW){
 			if(curr != null) {
-				comm.addComm(curr); 
+				comm.addComm(curr);
 				repaint();
-			}		
+			}
 		}
 		if (mode == Mode.MOVE){
 			moveFrom = null;
 			repaint();
 
 		}
-		curr = null; 
+		curr = null;
 		repaint();
 	}
 
