@@ -84,13 +84,13 @@ public class Rectangle implements Shape {
 	@Override
 	public void draw(Graphics g) {
 		g.setColor(color);
-		g.fillRect(x1,y1,x2,y2);
+		g.fillRect(x1,y1,x2-x1,y2-y1);
 	}
 
 	/**
 	* returns a string with "Rectangle" and then the (x1,y1) vals and (x2, y2) values, with color
 	*/
 	public String toString() {
-		return "Rectangle " + x1 + " " + y1 + " " + x2 + " " + y2 + " " + color.getRGB();
+		return "rectangle " + x1 + " " + y1 + " " + x2 + " " + y2 + " " + color.getRGB();
 	}
 }
